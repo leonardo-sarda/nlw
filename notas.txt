@@ -1,0 +1,9 @@
+4 rotas:
+    Rota 1
+        Cadastrar meta
+    Rota 2
+        Marca Meta concluida
+    Rota 3
+        Retorna resultado da semana
+    Rota 4
+        Retorna todas as metas
