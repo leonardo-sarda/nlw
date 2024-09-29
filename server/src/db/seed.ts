@@ -6,21 +6,21 @@ async function seed() {
   await db.delete(goalCompletions)
   await db.delete(goals)
 
-  const result = await db
-    .insert(goals)
-    .values([
-      { title: 'Acorda cedo', desiredWeeklyFrequency: 5 },
-      { title: 'Academia', desiredWeeklyFrequency: 5 },
-      { title: 'Estudar', desiredWeeklyFrequency: 3 },
-    ])
-    .returning()
+  // const result = await db
+  //   .insert(goals)
+  //   .values([
+  //     { title: 'Acorda cedo', desiredWeeklyFrequency: 5 },
+  //     { title: 'Academia', desiredWeeklyFrequency: 5 },
+  //     { title: 'Estudar', desiredWeeklyFrequency: 3 },
+  //   ])
+  //   .returning()
 
-  const startOfWeek = dayjs().startOf('week')
+  // const startOfWeek = dayjs().startOf('week')
 
-  await db.insert(goalCompletions).values([
-    { goalId: result[0].id, createdAt: startOfWeek.toDate() },
-    { goalId: result[1].id, createdAt: startOfWeek.add(1, 'day').toDate() },
-  ])
+  // await db.insert(goalCompletions).values([
+  //   { goalId: result[0].id, createdAt: startOfWeek.toDate() },
+  //   { goalId: result[1].id, createdAt: startOfWeek.add(1, 'day').toDate() },
+  // ])
 }
 
 seed().finally(() => {

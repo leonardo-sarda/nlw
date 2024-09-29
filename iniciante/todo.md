@@ -1,0 +1,7 @@
+-Criar metas
+-Listar metas
+-Metas realizadas
+-Metas abertas
+-Marca/Desmarcar metas realizadas
+-Remover metas
+-Sistemas de mensges

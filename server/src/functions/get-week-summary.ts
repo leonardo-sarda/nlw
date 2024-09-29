@@ -68,6 +68,7 @@ export async function getWeekSummary() {
       completedAt: string
     }[]
   >
+
   const result = await db
     .with(goalsCompletedInWeek, goalsCreatedUpToWeek, goalsCompletedByWeekDay)
     .select({
@@ -82,7 +83,7 @@ export async function getWeekSummary() {
       goalsPerDay: sql /*sql */<GoalsPerDay>`
         JSON_OBJECT_AGG(
             ${goalsCompletedByWeekDay.completedAtDate},
-            ${goalsCompletedByWeekDay.completions}
+            COALESCE(${goalsCompletedByWeekDay.completions}, '[]')
         )`,
     })
     .from(goalsCompletedByWeekDay)
