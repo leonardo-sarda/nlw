@@ -9,6 +9,7 @@ import {
 import {z} from 'zod'
 import {fastifySwagger} from '@fastify/swagger';
 import { fastifySwaggerUi } from '@fastify/swagger-ui';
+import { subscribeToEventRoute } from './routes/subscribe-to-event-route';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -33,29 +34,8 @@ app.register(fastifySwaggerUi,{
   routePrefix: '/docs'
 })
 
-app.post('/subscriptions', {
-schema: {
-  body: z.object({
-    name: z.string(),
-    email: z.string().email()
-  }),
-  response:{
-    201: z.object({
-      name: z.string()
-    })
-  }
-}
-}, async (request, reply) =>{
-  const { name, email} = request.body
+app.register(subscribeToEventRoute)
 
-  return reply.status(201).send({
-    name
-  })
-})
-
-app.get('/dev', () => {
-  return "Dev"
-})
 
 app.listen({port: 3333}).then(() =>{
   console.log("server running")
