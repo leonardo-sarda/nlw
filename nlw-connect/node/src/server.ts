@@ -38,5 +38,5 @@ app.register(fastifySwaggerUi, {
 app.register(subscribeToEventRoute)
 
 app.listen({ port: env.PORT }).then(() => {
-  console.log('HTTP server running!')
+  console.log('HTTP server running at port 3333!')
 })
