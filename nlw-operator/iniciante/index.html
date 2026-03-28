@@ -13,6 +13,46 @@
 <script src="https://upload-widget.cloudinary.com/latest/global/all.js" type="text/javascript"></script>  
 
 <script type="text/javascript">  
+
+  const app = {
+    transcriptionUrl: '',
+    public_id: '',
+    waitForTranscription: async() => {
+      const maxAttempts = 30;
+      const interval = 2000; // 2 segundos
+      let attempts = 0;
+
+      while (attempts < maxAttempts) {
+        try {
+          const url = `https://res.cloudinary.com/dhlkenqnh/raw/upload/v${Date.now()}/${app.public_id}.transcript`;
+          const response = await fetch(url);
+          if (response.ok) {
+            app.transcriptionUrl = url;
+            console.log('Transcrição pronta na URL:', url);
+            return url; // Retorna a URL da transcrição
+          }
+        } catch (error) {
+          console.error('Erro ao verificar a transcrição:', error);
+        }
+
+        attempts++;
+        console.log(`Tentativa ${attempts} de ${maxAttempts}...`);
+        await new Promise(resolve => setTimeout(resolve, interval));
+      }
+
+      console.error('Transcrição não ficou pronta após 30 tentativas.');
+      return null;
+
+    },
+    getTranscription: async () => {
+      const response = await fetch(app.transcriptionUrl)
+      return response.text()
+    },
+    getViralMoment: async () => {
+      const transcription =  await app.getTranscription();
+    }
+  }
+
   const config = {
     cloudName: 'dhlkenqnh',
     uploadPreset: 'upload_nlw'
@@ -20,13 +60,16 @@
   }
   const myWidget = cloudinary.createUploadWidget(
     config, 
-    (error, result) => { 
+    async (error, result) => { 
       if (!error && result && result.event === "success") { 
         console.log('Done! Here is the image info: ', result.info); 
+        app.public_id = result.info.public_id;
+
+        const isReady = await app.waitForTranscription();
       }
     }
   )
-
+  
   document.getElementById("upload_widget").addEventListener("click", function(){
       myWidget.open();
     }, false);
